@@ -3,6 +3,11 @@ import google.generativeai as genai
 import pandas as pd
 import re
 import time
+from dotenv import load_dotenv
+import os
+
+load_dotenv()
+api_key = os.getenv('API_KEY')
 
 # Streamlit app title
 st.title("Data Cleaning and Mapping Tool")
