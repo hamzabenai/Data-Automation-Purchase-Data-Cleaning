@@ -168,7 +168,7 @@ def main():
     example_df = pd.read_excel(r'data/raw_data_template.xlsx')
 
     # Create an in-memory BytesIO object to store the Excel file
-    output = io.BytesIO()
+    output = BytesIO()
 
     # Save the DataFrame to the BytesIO object as an Excel file
     with pd.ExcelWriter(output, engine='xlsxwriter') as writer:
