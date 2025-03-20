@@ -191,7 +191,7 @@ def main():
         st.write("Cleaned Data:")
         st.dataframe(df)
 
-        download_file = pd.read_excel(r'data/uplaod.xlsx')
+        download_file = pd.read_excel(r'data/submission_file.xlsx')
         with pd.ExcelWriter(download_file.name, engine='xlsxwriter') as writer:
             df.to_excel(writer, index=False, sheet_name='Cleaned Data')
 
