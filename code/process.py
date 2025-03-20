@@ -191,18 +191,26 @@ def main():
         st.write("Cleaned Data:")
         st.dataframe(df)
 
-        download_file = pd.read_excel(r'data/submission_file.xlsx')
-        with pd.ExcelWriter(download_file.name, engine='xlsxwriter') as writer:
+        # Load the submission file
+        submission_file_path = r'data/submission_file.xlsx'
+        try:
+            submission_df = pd.read_excel(submission_file_path)
+        except FileNotFoundError:
+            st.error(f"The file {submission_file_path} does not exist. Please ensure the file is in the correct location.")
+            return
+
+        # Update the submission file with the cleaned data
+        with pd.ExcelWriter(submission_file_path, engine='xlsxwriter') as writer:
             df.to_excel(writer, index=False, sheet_name='Cleaned Data')
 
-        st.success(f"Cleaned data has been saved to {download_file.name}")
+        st.success(f"Cleaned data has been saved to {submission_file_path}")
 
-        # Optionally, provide a download link for the cleaned file
-        with open(download_file.name, "rb") as file:
+        # Provide a download link for the updated submission file
+        with open(submission_file_path, "rb") as file:
             btn = st.download_button(
-                label="Download Cleaned Data as Excel",
+                label="Download Updated Submission File as Excel",
                 data=file,
-                file_name=download_file.name,
+                file_name="submission_file.xlsx",
                 mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
             )
 
