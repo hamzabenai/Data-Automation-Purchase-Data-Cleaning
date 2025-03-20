@@ -38,14 +38,14 @@ def cleaning_data(df):
     df['code wilaya*'] = None
     df['commune de livraison*'] = None
     df['poids (kg)'] = None
-    df['FRAGILE'] = None
-    df['OUVRIR'] = None
-    df['ECHANGE'] = None
-    df['PICK UP'] = None
-    df['RECOUVREMENT'] = None
-    df['STOP DESK'] = None
+    df['FRAGILE( si oui mettez OUI sinon laissez vide )'] = None
+    df['OUVRIR( si oui mettez OUI sinon laissez vide )'] = None
+    df['ECHANGE( si oui mettez OUI sinon laissez vide )'] = None
+    df['PICK UP( si oui mettez OUI sinon laissez vide )'] = None
+    df['RECOUVREMENT( si oui mettez OUI sinon laissez vide )'] = None
+    df['STOP DESK( si oui mettez OUI sinon laissez vide )'] = None
     df['Lien map'] = None
-    df = df[['reference commande', 'nom et prenom du destinataire*', 'telephone*', 'telephone 2', 'code wilaya*', 'wilaya de livraison', 'commune de livraison*', 'adresse de livraison*', 'produit*', 'poids (kg)', 'montant du colis*', 'remarque', 'FRAGILE', 'OUVRIR', 'ECHANGE','PICK UP( si oui mettez OUI sinon laissez vide )','STOP DESK( si oui mettez OUI sinon laissez vide )','STOP DESK', 'Lien map']]
+    df = df[['reference commande', 'nom et prenom du destinataire*', 'telephone*', 'telephone 2', 'code wilaya*', 'wilaya de livraison', 'commune de livraison*', 'adresse de livraison*', 'produit*', 'poids (kg)', 'montant du colis*', 'remarque', 'FRAGILE( si oui mettez OUI sinon laissez vide )', 'OUVRIR( si oui mettez OUI sinon laissez vide )', 'ECHANGE( si oui mettez OUI sinon laissez vide )','PICK UP( si oui mettez OUI sinon laissez vide )','STOP DESK( si oui mettez OUI sinon laissez vide )', 'Lien map']]
     df['telephone*'] = df['telephone*'].astype(str)
     df['telephone*'] = df['telephone*'].str.replace(' ', '')
     df['montant du colis*'] = df['montant du colis*'].replace('[^0-9.]', '', regex=True)
