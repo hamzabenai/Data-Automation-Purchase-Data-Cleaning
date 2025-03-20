@@ -45,8 +45,10 @@ def cleaning_data(df):
     df = df[['reference', 'nom et prenom du destinataire*', 'telephone*', 'telephone 2', 'code wilaya*', 'wilaya de livraison', 'commune de livraison*', 'adresse de livraison*', 'produit (référence)*', 'poids (kg)', 'montant du colis*', 'remarque', 'FRAGILE', 'OUVRIR', 'ECHANGE', 'STOP DESK', 'Lien map']]
     df['telephone*'] = df['telephone*'].astype(str)
     df['telephone*'] = df['telephone*'].str.replace(' ', '')
-    df['telephone*'] = '0' + df['telephone*']
+    if len(df['telephone*']) == 9:
+        df['telephone*'] = '0' + df['telephone*']
     return df
+
 
 def load_model():
     genai.configure(api_key="AIzaSyCggDnTG__jpKsRNaMiclJDEGucy4PqobA")
@@ -149,7 +151,7 @@ def main():
 
         st.download_button(
             label="Download Cleaned Data as CSV",
-            data=df.to_csv(index=False).encode('utf-8'),
+            data=df,
             file_name="cleaned_data.csv",
             mime="text/csv"
         )
