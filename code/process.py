@@ -5,6 +5,8 @@ import re
 import time
 from dotenv import load_dotenv
 import os
+from io import BytesIO
+
 
 load_dotenv()
 api_key = os.getenv('API_KEY')
@@ -153,6 +155,7 @@ def main():
         file_name="template.csv",
         mime="text/csv",
     )
+    
     st.header('Upload your data')
     uploaded_file = st.file_uploader("Upload your raw data file (Excel)", type=["xlsx"])
     if uploaded_file is not None:
@@ -169,12 +172,19 @@ def main():
         st.write("Cleaned Data:")
         st.dataframe(df)
 
+        # Convert DataFrame to Excel in memory
+        output = BytesIO()
+        with pd.ExcelWriter(output, engine='xlsxwriter') as writer:
+            df.to_excel(writer, index=False, sheet_name='Cleaned Data')
+        output.seek(0)  # Reset the stream position to the beginning
+
         st.download_button(
-            label="Download Cleaned Data as CSV",
-            data=df.to_excel(index=False, header=True, encoding='utf-8').encode("utf-8"),
+            label="Download Cleaned Data as Excel",
+            data=output,
             file_name="cleaned_data.xlsx",
-            mime="text/csv"
+            mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
         )
+
 
 if __name__ == "__main__":
     main()
