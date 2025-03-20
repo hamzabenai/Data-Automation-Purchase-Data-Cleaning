@@ -117,12 +117,12 @@ def assign_map_values(df, wilaya_info):
 def main():
     commune_data = load_material_data()
     st.write("Your input data should look like the following example:")
-    raw = pd.read_excel(r'data\raw_data.xlsx')
+    raw = pd.read_excel(r'data/raw_data.xlsx')
     st.dataframe(raw)
     
     st.header("Download Template CSV File")
     st.write("If you don't have a file, you can download the template below:")
-    example_df = pd.read_excel(r'upload\raw_data_tempalte.xlsx')
+    example_df = pd.read_excel(r'upload/raw_data_tempalte.xlsx')
     csv = example_df.to_csv(index=False).encode("utf-8")
 
     st.download_button(
