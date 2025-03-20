@@ -171,31 +171,40 @@ def main():
     st.header('Upload your data')
     uploaded_file = st.file_uploader("Upload your raw data file (Excel)", type=["xlsx"])
     if uploaded_file is not None:
+        # Load the uploaded file into a DataFrame
         df = load_input_data(uploaded_file)
+        
+        # Clean the data
         df = cleaning_data(df)
 
+        # Load the model for mapping
         model = load_model()
 
+        # Map code wilaya and commune
         with st.spinner("Mapping code wilaya and commune..."):
             wilaya_info = mapping_code_commune(commune_data, df, model)
 
+        # Assign mapped values to the DataFrame
         df = assign_map_values(df, wilaya_info)
 
+        # Display the cleaned data
         st.write("Cleaned Data:")
         st.dataframe(df)
 
-        # Convert DataFrame to Excel in memory
-        output = BytesIO()
-        with pd.ExcelWriter(output, engine='xlsxwriter') as writer:
+        download_file = pd.read_excel('upload/uplaod.xlsx')
+        with pd.ExcelWriter(download_file.name, engine='xlsxwriter') as writer:
             df.to_excel(writer, index=False, sheet_name='Cleaned Data')
-        output.seek(0)  # Reset the stream position to the beginning
 
-        st.download_button(
-            label="Download Cleaned Data as Excel",
-            data=output,
-            file_name="cleaned_data.xlsx",
-            mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-        )
+        st.success(f"Cleaned data has been saved to {download_file.name}")
+
+        # Optionally, provide a download link for the cleaned file
+        with open(download_file.name, "rb") as file:
+            btn = st.download_button(
+                label="Download Cleaned Data as Excel",
+                data=file,
+                file_name=download_file.name,
+                mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+            )
 
 if __name__ == "__main__":
     main()
