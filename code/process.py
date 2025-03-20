@@ -14,7 +14,7 @@ st.title("Data Cleaning and Mapping Tool")
 
 # Function to load commune data
 def load_material_data():
-    commune_data = pd.read_excel(r'\automation\data\process_data.xlsx', sheet_name='communes')
+    commune_data = pd.read_excel(r'data/process_data.xlsx', sheet_name='communes')
     return commune_data
 
 # Function to load input data
