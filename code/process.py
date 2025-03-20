@@ -171,7 +171,7 @@ def main():
 
         st.download_button(
             label="Download Cleaned Data as CSV",
-            data=df,
+            data=df.to_excel(index=False, header=True, encoding='utf-8').encode("utf-8"),
             file_name="cleaned_data.xlsx",
             mime="text/csv"
         )
