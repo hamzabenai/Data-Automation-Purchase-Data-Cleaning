@@ -138,6 +138,7 @@ def extract_info(response_text):
 def assign_map_values(df, wilaya_info):
     df['code wilaya*'] = df['wilaya de livraison'].map(lambda x: wilaya_info[x]['code wilaya'])
     df['commune de livraison*'] = df['wilaya de livraison'].map(lambda x: wilaya_info[x]['nom commune'])
+    df['code wilaya*'] = df['code wilaya*'].astype(int)
     return df
 
 def main():
