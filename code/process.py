@@ -45,7 +45,7 @@ def cleaning_data(df):
     df['RECOUVREMENT'] = None
     df['STOP DESK'] = None
     df['Lien map'] = None
-    df = df[['reference commande', 'nom et prenom du destinataire*', 'telephone*', 'telephone 2', 'code wilaya*', 'wilaya de livraison', 'commune de livraison*', 'adresse de livraison*', 'produit*', 'poids (kg)', 'montant du colis*', 'remarque', 'FRAGILE', 'OUVRIR', 'ECHANGE','PICK UP','RECOUVREMENT','STOP DESK', 'Lien map']]
+    df = df[['reference commande', 'nom et prenom du destinataire*', 'telephone*', 'telephone 2', 'code wilaya*', 'wilaya de livraison', 'commune de livraison*', 'adresse de livraison*', 'produit*', 'poids (kg)', 'montant du colis*', 'remarque', 'FRAGILE', 'OUVRIR', 'ECHANGE','PICK UP( si oui mettez OUI sinon laissez vide )','STOP DESK( si oui mettez OUI sinon laissez vide )','STOP DESK', 'Lien map']]
     df['telephone*'] = df['telephone*'].astype(str)
     df['telephone*'] = df['telephone*'].str.replace(' ', '')
     df['montant du colis*'] = df['montant du colis*'].replace('[^0-9.]', '', regex=True)
