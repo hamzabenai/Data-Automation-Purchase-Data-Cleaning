@@ -25,7 +25,7 @@ def load_input_data(uploaded_file):
 
 # Function to clean data
 def cleaning_data(df):
-    df = df[['EXPEDITION'] == 'expidie' | ['status'] == 'confirmer']
+    df = df[(df['EXPEDITION'] == 'expidie') | (df['status'] == 'confirmer')]
     df = df.drop(columns=['status', 'EXPEDITION'])
     df = df[['الاسم و لقب', 'رقم الهاتف', 'الولاية', 'العنوان', 'produits', 'السعر', 'comment-3', 'comment-1', 'comment-2']]
     df['reference commande'] = df['produits']
