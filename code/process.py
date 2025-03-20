@@ -27,12 +27,12 @@ def load_input_data(uploaded_file):
 def cleaning_data(df):
     df = df.drop(columns=['status', 'EXPEDITION'])
     df = df[['الاسم و لقب', 'رقم الهاتف', 'الولاية', 'العنوان', 'produits', 'السعر', 'comment-3', 'comment-1', 'comment-2']]
-    df['reference'] = df['produits']
-    df.insert(0, 'reference', df.pop('reference'))
+    df['reference commande'] = df['produits']
+    df.insert(0, 'reference commande', df.pop('reference commande'))
     df[['comment-1', 'comment-2', 'comment-3']] = df[['comment-1', 'comment-2', 'comment-3']].astype(str)
     df['remarque'] = df['comment-3'] + '+' + df['comment-1'] + '+' + df['comment-2']
     df = df.drop(columns=['comment-3', 'comment-1', 'comment-2'])
-    df.rename(columns={'الاسم و لقب': 'nom et prenom du destinataire*', 'رقم الهاتف': 'telephone*', 'الولاية': 'wilaya de livraison', 'العنوان': 'adresse de livraison*', 'produits': 'produit (référence)*', 'السعر': 'montant du colis*'}, inplace=True)
+    df.rename(columns={'الاسم و لقب': 'nom et prenom du destinataire*', 'رقم الهاتف': 'telephone*', 'الولاية': 'wilaya de livraison', 'العنوان': 'adresse de livraison*', 'produits': 'produit*', 'السعر': 'montant du colis*'}, inplace=True)
     df['nom et prenom du destinataire*'].fillna('pas de nom', inplace=True)
     df['telephone 2'] = None
     df['code wilaya*'] = None
@@ -41,9 +41,11 @@ def cleaning_data(df):
     df['FRAGILE'] = None
     df['OUVRIR'] = None
     df['ECHANGE'] = None
+    df['PICK UP'] = None
+    df['RECOUVREMENT'] = None
     df['STOP DESK'] = None
     df['Lien map'] = None
-    df = df[['reference', 'nom et prenom du destinataire*', 'telephone*', 'telephone 2', 'code wilaya*', 'wilaya de livraison', 'commune de livraison*', 'adresse de livraison*', 'produit (référence)*', 'poids (kg)', 'montant du colis*', 'remarque', 'FRAGILE', 'OUVRIR', 'ECHANGE', 'STOP DESK', 'Lien map']]
+    df = df[['reference commande', 'nom et prenom du destinataire*', 'telephone*', 'telephone 2', 'code wilaya*', 'wilaya de livraison', 'commune de livraison*', 'adresse de livraison*', 'produit*', 'poids (kg)', 'montant du colis*', 'remarque', 'FRAGILE', 'OUVRIR', 'ECHANGE', 'STOP DESK', 'Lien map']]
     df['telephone*'] = df['telephone*'].astype(str)
     df['telephone*'] = df['telephone*'].str.replace(' ', '')
     df['montant du colis*'] = df['montant du colis*'].replace('[^0-9.]', '', regex=True)
