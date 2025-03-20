@@ -155,7 +155,7 @@ def main():
         st.download_button(
             label="Download Cleaned Data as CSV",
             data=df,
-            file_name="cleaned_data.csv",
+            file_name="cleaned_data.xlsx",
             mime="text/csv"
         )
 
