@@ -1,5 +1,4 @@
 pandas
 google.generativeai
-re
-time
 streamlit
+google-generativeai
