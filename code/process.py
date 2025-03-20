@@ -46,10 +46,27 @@ def cleaning_data(df):
     df['telephone*'] = df['telephone*'].astype(str)
     df['telephone*'] = df['telephone*'].str.replace(' ', '')
     
-    if len(df['telephone*']) == 9:
-        df['telephone*'] = '0' + df['telephone*']
-    elif len(df['telephone*']) == 10:
-        df['telephone*'] = df['telephone*']
+    def format_algerian_phone(phone):
+    # Remove any non-digit characters
+        phone = ''.join(filter(str.isdigit, str(phone)))
+        
+        # Check if the phone number is valid
+        if len(phone) == 9:
+            # Add leading zero for landline numbers
+            phone = '0' + phone
+        elif len(phone) == 10:
+            # Ensure it starts with 0
+            if not phone.startswith('0'):
+                return None  # Invalid format
+        else:
+            return None  # Invalid length
+        
+        # Validate Algerian phone number format
+        if phone.startswith('0') and (len(phone) == 10 or len(phone) == 9):
+            return phone
+        else:
+            return None  # Invalid format
+    df['telephone*'] = df['telephone*'].apply(format_algerian_phone)
     return df
 
 
