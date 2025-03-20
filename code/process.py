@@ -9,7 +9,7 @@ st.title("Data Cleaning and Mapping Tool")
 
 # Function to load commune data
 def load_material_data():
-    commune_data = pd.read_excel(r'H:\work\zaki\automation\data\process_data.xlsx', sheet_name='communes')
+    commune_data = pd.read_excel(r'\automation\data\process_data.xlsx', sheet_name='communes')
     return commune_data
 
 # Function to load input data
@@ -43,19 +43,16 @@ def cleaning_data(df):
     df['telephone*'] = '0' + df['telephone*']
     return df
 
-# Function to load the Gemini model
 def load_model():
     genai.configure(api_key="AIzaSyCggDnTG__jpKsRNaMiclJDEGucy4PqobA")
     model = genai.GenerativeModel('gemini-2.0-flash')
     return model
 
-# Function to map code and commune
 def mapping_code_commune(commune_data, df, model):
     commune_names = commune_data['nom communes'].tolist()
     wilaya_info = {}
-    cooldown_time = 5  # Cooldown period in seconds
+    cooldown_time = 5  
 
-    # Initialize progress bar
     progress_bar = st.progress(0)
     total_rows = len(df)
     
@@ -63,7 +60,6 @@ def mapping_code_commune(commune_data, df, model):
         wilaya = row['wilaya de livraison']
         address = row['adresse de livraison*']
         try:
-            # Get the response from Gemini
             response_text = get_wilaya_info(wilaya, address, commune_names, model)
             code_wilaya, nom_commune = extract_info(response_text)
             
@@ -89,7 +85,6 @@ def mapping_code_commune(commune_data, df, model):
             }
     return wilaya_info
 
-# Function to get wilaya info from Gemini
 def get_wilaya_info(wilaya_name, address, commune_names, model):
     prompt = f'''For the wilaya: {wilaya_name} in Algeria and address: {address}, provide the 'code wilaya' and 'nom commune'.
     The 'nom commune' must be one of the following: {", ".join(commune_names)}.
@@ -100,7 +95,6 @@ def get_wilaya_info(wilaya_name, address, commune_names, model):
     response = model.generate_content(prompt)
     return response.text
 
-# Function to extract info from Gemini response
 def extract_info(response_text):
     code_wilaya_match = re.search(r'"code wilaya":\s*"(\d{2})"', response_text)
     nom_commune_match = re.search(r'"nom commune":\s*"([^"]+)"', response_text)
@@ -110,40 +104,29 @@ def extract_info(response_text):
     
     return code_wilaya, nom_commune
 
-# Function to assign mapped values to the DataFrame
 def assign_map_values(df, wilaya_info):
     df['code wilaya*'] = df['wilaya de livraison'].map(lambda x: wilaya_info[x]['code wilaya'])
     df['commune de livraison*'] = df['wilaya de livraison'].map(lambda x: wilaya_info[x]['nom commune'])
     return df
 
-# Main function
 def main():
-    # Load commune data
     commune_data = load_material_data()
-
-    # File uploader for raw data
     uploaded_file = st.file_uploader("Upload your raw data file (Excel)", type=["xlsx"])
     
     if uploaded_file is not None:
-        # Load and clean the data
         df = load_input_data(uploaded_file)
         df = cleaning_data(df)
 
-        # Load the Gemini model
         model = load_model()
 
-        # Map code and commune
         with st.spinner("Mapping code wilaya and commune..."):
             wilaya_info = mapping_code_commune(commune_data, df, model)
 
-        # Assign mapped values to the DataFrame
         df = assign_map_values(df, wilaya_info)
 
-        # Display the cleaned data
         st.write("Cleaned Data:")
         st.dataframe(df)
 
-        # Download button for the cleaned data
         st.download_button(
             label="Download Cleaned Data as CSV",
             data=df.to_csv(index=False).encode('utf-8'),
@@ -151,6 +134,5 @@ def main():
             mime="text/csv"
         )
 
-# Run the app
 if __name__ == "__main__":
     main()
