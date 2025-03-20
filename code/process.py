@@ -157,16 +157,24 @@ def main():
     raw = pd.read_excel(r'data/raw_data.xlsx').head()
     st.dataframe(raw)
     
-    st.header("Download Template CSV File")
-    st.write("If you don't have a file, you can download the template below:")
     example_df = pd.read_excel(r'data/raw_data_template.xlsx')
-    csv = example_df.to_csv(index=False).encode("utf-8")
 
+    # Create an in-memory BytesIO object to store the Excel file
+    output = BytesIO()
+
+    # Save the DataFrame to the BytesIO object as an Excel file
+    with pd.ExcelWriter(output, engine='xlsxwriter') as writer:
+        example_df.to_excel(writer, index=False, sheet_name='Template')
+
+    # Seek to the beginning of the stream
+    output.seek(0)
+
+    # Provide a download button for the Excel file
     st.download_button(
-        label="Download Template CSV",
-        data=csv,
-        file_name="template.csv",
-        mime="text/csv",
+        label="Download Template Excel",
+        data=output,
+        file_name="template.xlsx",
+        mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
     )
     
     st.header('Upload your data')
