@@ -14,7 +14,7 @@ st.title("Data Cleaning and Mapping Tool")
 
 # Function to load commune data
 def load_material_data():
-    commune_data = pd.read_excel(r'\automation\data\process_data.xlsx', sheet_name='communes')
+    commune_data = pd.read_excel(r'data/process_data.xlsx', sheet_name='communes')
     return commune_data
 
 # Function to load input data
@@ -116,8 +116,23 @@ def assign_map_values(df, wilaya_info):
 
 def main():
     commune_data = load_material_data()
-    uploaded_file = st.file_uploader("Upload your raw data file (Excel)", type=["xlsx"])
+    st.write("Your input data should look like the following example:")
+    raw = pd.read_excel(r'data/raw_data.xlsx').head()
+    st.dataframe(raw)
     
+    st.header("Download Template CSV File")
+    st.write("If you don't have a file, you can download the template below:")
+    example_df = pd.read_excel(r'data/raw_data_template.xlsx')
+    csv = example_df.to_csv(index=False).encode("utf-8")
+
+    st.download_button(
+        label="Download Template CSV",
+        data=csv,
+        file_name="template.csv",
+        mime="text/csv",
+    )
+    st.header('Upload your data')
+    uploaded_file = st.file_uploader("Upload your raw data file (Excel)", type=["xlsx"])
     if uploaded_file is not None:
         df = load_input_data(uploaded_file)
         df = cleaning_data(df)
