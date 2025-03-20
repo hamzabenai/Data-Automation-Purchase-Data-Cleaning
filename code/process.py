@@ -7,7 +7,6 @@ from dotenv import load_dotenv
 import os
 from io import BytesIO
 
-
 load_dotenv()
 api_key = os.getenv('API_KEY')
 
@@ -139,6 +138,13 @@ def assign_map_values(df, wilaya_info):
     return df
 
 def main():
+    try:
+        # Check if xlsxwriter is installed
+        import xlsxwriter
+    except ImportError:
+        st.error("The 'xlsxwriter' library is not installed. Please install it using `pip install xlsxwriter`.")
+        return
+
     commune_data = load_material_data()
     st.write("Your input data should look like the following example:")
     raw = pd.read_excel(r'data/raw_data.xlsx').head()
@@ -184,7 +190,6 @@ def main():
             file_name="cleaned_data.xlsx",
             mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
         )
-
 
 if __name__ == "__main__":
     main()

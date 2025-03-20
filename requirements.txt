@@ -4,3 +4,4 @@ streamlit
 google-generativeai
 openpyxl
 python-dotenv
+xlsxwriter
