@@ -45,7 +45,7 @@ def cleaning_data(df):
     df['RECOUVREMENT( si oui mettez OUI sinon laissez vide )'] = None
     df['STOP DESK( si oui mettez OUI sinon laissez vide )'] = None
     df['Lien map'] = None
-    df = df[['reference commande', 'nom et prenom du destinataire*', 'telephone*', 'telephone 2', 'code wilaya*', 'wilaya de livraison', 'commune de livraison*', 'adresse de livraison*', 'produit*', 'poids (kg)', 'montant du colis*', 'remarque', 'FRAGILE( si oui mettez OUI sinon laissez vide )', 'OUVRIR( si oui mettez OUI sinon laissez vide )', 'ECHANGE( si oui mettez OUI sinon laissez vide )','PICK UP( si oui mettez OUI sinon laissez vide )','STOP DESK( si oui mettez OUI sinon laissez vide )', 'Lien map']]
+    df = df[['reference commande', 'nom et prenom du destinataire*', 'telephone*', 'telephone 2', 'code wilaya*', 'wilaya de livraison', 'commune de livraison*', 'adresse de livraison*', 'produit*', 'poids (kg)', 'montant du colis*', 'remarque', 'FRAGILE\n( si oui mettez OUI sinon laissez vide )', 'OUVRIR\n( si oui mettez OUI sinon laissez vide )', 'ECHANGE\n( si oui mettez OUI sinon laissez vide )','PICK UP\n( si oui mettez OUI sinon laissez vide )','STOP DESK\n( si oui mettez OUI sinon laissez vide )', 'Lien map']]
     df['telephone*'] = df['telephone*'].astype(str)
     df['telephone*'] = df['telephone*'].str.replace(' ', '')
     df['montant du colis*'] = df['montant du colis*'].replace('[^0-9.]', '', regex=True)
