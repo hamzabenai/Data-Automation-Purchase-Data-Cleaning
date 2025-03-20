@@ -131,7 +131,7 @@ def main():
         file_name="template.csv",
         mime="text/csv",
     )
-    st.header('Upload your data ")
+    st.header('Upload your data')
     uploaded_file = st.file_uploader("Upload your raw data file (Excel)", type=["xlsx"])
     if uploaded_file is not None:
         df = load_input_data(uploaded_file)
