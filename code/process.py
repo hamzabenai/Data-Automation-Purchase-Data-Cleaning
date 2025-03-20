@@ -144,6 +144,10 @@ def assign_map_values(df, wilaya_info):
     df['code wilaya*'] = df['code wilaya*'].astype(int)
     return df
 
+# Initialize session state
+if 'df_processed' not in st.session_state:
+    st.session_state.df_processed = None
+
 def main():
     try:
         # Check if xlsxwriter is installed
@@ -157,10 +161,14 @@ def main():
     raw = pd.read_excel(r'data/raw_data.xlsx').head()
     st.dataframe(raw)
     
+    st.header("Download Template Excel File")
+    st.write("If you don't have a file, you can download the template below:")
+
+    # Load the template Excel file
     example_df = pd.read_excel(r'data/raw_data_template.xlsx')
 
     # Create an in-memory BytesIO object to store the Excel file
-    output = BytesIO()
+    output = io.BytesIO()
 
     # Save the DataFrame to the BytesIO object as an Excel file
     with pd.ExcelWriter(output, engine='xlsxwriter') as writer:
@@ -179,49 +187,49 @@ def main():
     
     st.header('Upload your data')
     uploaded_file = st.file_uploader("Upload your raw data file (Excel)", type=["xlsx"])
+
     if uploaded_file is not None:
         # Load the uploaded file into a DataFrame
         df = load_input_data(uploaded_file)
         
-        # Clean the data
-        df = cleaning_data(df)
+        # Display a button to process the data
+        if st.button("Process Data"):
+            with st.spinner("Processing data..."):
+                # Clean the data
+                df = cleaning_data(df)
 
-        # Load the model for mapping
-        model = load_model()
+                # Load the model for mapping
+                model = load_model()
 
-        # Map code wilaya and commune
-        with st.spinner("Mapping code wilaya and commune..."):
-            wilaya_info = mapping_code_commune(commune_data, df, model)
+                # Map code wilaya and commune
+                wilaya_info = mapping_code_commune(commune_data, df, model)
 
-        # Assign mapped values to the DataFrame
-        df = assign_map_values(df, wilaya_info)
+                # Assign mapped values to the DataFrame
+                df = assign_map_values(df, wilaya_info)
 
-        # Display the cleaned data
-        st.write("Cleaned Data:")
-        st.dataframe(df)
+                # Store the processed DataFrame in session state
+                st.session_state.df_processed = df
 
-        # Load the submission file
-        submission_file_path = r'data/submission_file.xlsx'
-        try:
-            submission_df = pd.read_excel(submission_file_path)
-        except FileNotFoundError:
-            st.error(f"The file {submission_file_path} does not exist. Please ensure the file is in the correct location.")
-            return
+                st.success("Data processing completed!")
 
-        # Update the submission file with the cleaned data
-        with pd.ExcelWriter(submission_file_path, engine='xlsxwriter') as writer:
-            df.to_excel(writer, index=False, sheet_name='Cleaned Data')
+        # Display the cleaned data if it exists in session state
+        if st.session_state.df_processed is not None:
+            st.write("Cleaned Data:")
+            st.dataframe(st.session_state.df_processed)
 
-        st.success(f"Cleaned data has been saved to {submission_file_path}")
+            # Save the cleaned DataFrame to a new file
+            cleaned_file_name = "cleaned_" + uploaded_file.name
+            with pd.ExcelWriter(cleaned_file_name, engine='xlsxwriter') as writer:
+                st.session_state.df_processed.to_excel(writer, index=False, sheet_name='Cleaned Data')
 
-        # Provide a download link for the updated submission file
-        with open(submission_file_path, "rb") as file:
-            btn = st.download_button(
-                label="Download Updated Submission File as Excel",
-                data=file,
-                file_name="submission_file.xlsx",
-                mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-            )
+            # Provide a download link for the cleaned file
+            with open(cleaned_file_name, "rb") as file:
+                st.download_button(
+                    label="Download Cleaned Data as Excel",
+                    data=file,
+                    file_name=cleaned_file_name,
+                    mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+                )
 
 if __name__ == "__main__":
     main()
