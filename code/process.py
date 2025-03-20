@@ -45,8 +45,11 @@ def cleaning_data(df):
     df = df[['reference', 'nom et prenom du destinataire*', 'telephone*', 'telephone 2', 'code wilaya*', 'wilaya de livraison', 'commune de livraison*', 'adresse de livraison*', 'produit (référence)*', 'poids (kg)', 'montant du colis*', 'remarque', 'FRAGILE', 'OUVRIR', 'ECHANGE', 'STOP DESK', 'Lien map']]
     df['telephone*'] = df['telephone*'].astype(str)
     df['telephone*'] = df['telephone*'].str.replace(' ', '')
+    
     if len(df['telephone*']) == 9:
         df['telephone*'] = '0' + df['telephone*']
+    elif len(df['telephone*']) == 10:
+        df['telephone*'] = df['telephone*']
     return df
 
 
