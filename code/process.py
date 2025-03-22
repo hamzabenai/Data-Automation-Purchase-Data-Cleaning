@@ -121,12 +121,14 @@ def mapping_code_commune(commune_data, df, model):
     return wilaya_info
 
 def get_wilaya_info(wilaya_name, address, commune_names, model):
-    prompt = f'''For the wilaya: {wilaya_name} in Algeria and address: {address}, provide the 'code wilaya' and 'nom commune'.
+    prompt = f'''For the wilaya: {wilaya_name} in Algeria and address: {address}, first translate the {wilaya_name} to french then provide the 'code wilaya' and 'nom commune'.
     The 'nom commune' must be one of the following: {", ".join(commune_names)}.
     Use the following format:
     "code wilaya": "XX",
     "nom commune": "XXXXX"
-    Ensure the response contains only the code wilaya as a two-digit number and the nom commune as a string from the provided list.'''
+    Ensure the response contains only the code wilaya as a two-digit number and the nom commune as a string from the provided list.
+    ensure if you don't find the commune name, you can return the wilaya name
+    if you couldn't find a match try to search on google '''
     response = model.generate_content(prompt)
     return response.text
 
