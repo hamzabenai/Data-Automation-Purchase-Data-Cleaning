@@ -30,11 +30,12 @@ def cleaning_data(df):
     df = df[['الاسم و لقب', 'رقم الهاتف', 'الولاية', 'العنوان', 'produits', 'السعر', 'comment-3', 'comment-1', 'comment-2']]
     df['reference commande'] = df['produits']
     df.insert(0, 'reference commande', df.pop('reference commande'))
-    df[['comment-1', 'comment-2', 'comment-3']] = df[['comment-1', 'comment-2', 'comment-3']].astype(str)
+    df[['comment-1', 'comment-2', 'comment-3']] = df[['comment-1', 'comment-2', 'comment-3']].astype(str).fillna(' ',inplace=True)
     df['remarque'] = df['comment-3'] + '+' + df['comment-1'] + '+' + df['comment-2']
     df = df.drop(columns=['comment-3', 'comment-1', 'comment-2'])
     df.rename(columns={'الاسم و لقب': 'nom et prenom du destinataire*', 'رقم الهاتف': 'telephone*', 'الولاية': 'wilaya de livraison', 'العنوان': 'adresse de livraison*', 'produits': 'produit*', 'السعر': 'montant du colis*'}, inplace=True)
     df['nom et prenom du destinataire*'].fillna('pas de nom', inplace=True)
+    df['adresse de livraison*'].fillna(df['wilaya de livraison'], inplace=True)
     df['telephone 2'] = None
     df['code wilaya*'] = None
     df['commune de livraison*'] = None
