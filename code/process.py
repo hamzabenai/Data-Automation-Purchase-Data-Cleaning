@@ -131,22 +131,21 @@ def get_wilaya_info(wilaya_name, address, commune_names, model):
     prompt = f'''
     Task: Extract the Algerian Wilaya code and Commune name from order details.
 
-    Given the following order information, please extract the wilaya code and the commune name.
+    you are a assistent that is aware of the algeria's geogriphic location
+    Given the following order information, please try to find or identify the wilaya code and the commune name.
 
-    Instructions:
-    1. If the 'Existing Wilaya Code' is provided, use it.
-    2. If the 'Commune de livraison' is provided, use it.
-    3. If either the Wilaya Code or Commune is missing, use the 'Wilaya de livraison' and 'Adresse de livraison' to find the correct values.
-    
     Order Information:
     - Wilaya de livraison: {wilaya_name}
     - Commune de livraison: it's up to you to find it
     - Adresse de livraison: {address}
     - code wilaya: it's up to you to find it 
     
-    key points :
-    - if you couldn't identify the wilaya code or the commune name, try to read it in arabic.
-    - if you coudn't find the Commune de livraison return the {wilaya_name}
+    Instructions:
+    1. If the 'Existing Wilaya Code' is provided, use it.
+    2. If the 'Commune de livraison' is provided, use it.
+    3. If either the Wilaya Code or Commune is missing, use the 'Wilaya de livraison' and 'Adresse de livraison' to find the correct values.
+    4. if you couldn't identify the wilaya code or the commune name, try to read it in arabic and find the corresponding wilaya code and commune name.
+    5. if you coudn't find the Commune de livraison return the {wilaya_name}
 
     Use the following format:
     "code wilaya": "XX",
