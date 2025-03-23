@@ -128,10 +128,16 @@ def get_wilaya_info(wilaya_name, address, commune_names, model):
     wilaya_name = standardize_text(wilaya_name)
     address = standardize_text(address)
     
-    prompt = f'''Given the following order information, please extract the wilaya code and the commune name.
-    If the code or commune is not present please search for it using the wilaya name and the address.
-    If you can't find the code or commune, return "NaN".
+    prompt = f'''
+    Task: Extract the Algerian Wilaya code and Commune name from order details.
 
+    Given the following order information, please extract the wilaya code and the commune name.
+
+    Instructions:
+    1. If the 'Existing Wilaya Code' is provided, use it.
+    2. If the 'Commune de livraison' is provided, use it.
+    3. If either the Wilaya Code or Commune is missing, use the 'Wilaya de livraison' and 'Adresse de livraison' to find the correct values.
+    
     Order Information:
     - Wilaya de livraison: {wilaya_name}
     - Commune de livraison: it's up to you to find it
