@@ -119,22 +119,30 @@ def mapping_code_commune(commune_data, df, model):
                 "adresse de livraison*": address
             }
     return wilaya_info
-
+def standardize_text(text):
+    if pd.isna(text) or text.strip() == "":
+        return ""
+    return text.strip().capitalize()
 def get_wilaya_info(wilaya_name, address, commune_names, model):
+    # Standardize wilaya_name and address
+    wilaya_name = standardize_text(wilaya_name)
+    address = standardize_text(address)
+    
     prompt = f'''For the wilaya: {wilaya_name} in Algeria and address: {address}, provide the 'code wilaya' and 'nom commune'.
-The 'nom commune' must be one of the following: {", ".join(commune_names)}.
-Follow these steps:
-1. Identify the wilaya and its corresponding 'code wilaya' from the list of Algerian wilayas.
-2. If the address contains a specific commune name, match it exactly to the provided list of communes.
-3. If the exact commune is not found, infer the closest match based on the address details (e.g., neighborhood, street, or landmark).
-4. If no commune can be inferred, use the wilaya name as the 'nom commune'.
-5. Ensure the 'code wilaya' is a two-digit number and the 'nom commune' is a string from the provided list or the wilaya name as a fallback.
-6. Do not translate any names to French unless explicitly requested.
+    The 'nom commune' must be one of the following: {", ".join(commune_names)}.
+    Follow these steps:
+    1. Identify the wilaya and its corresponding 'code wilaya' from the list of Algerian wilayas.
+    2. If the address contains a specific commune name, match it exactly to the provided list of communes.
+    3. If the exact commune is not found, infer the closest match based on the address details (e.g., neighborhood, street, or landmark).
+    4. If no commune can be inferred, use the wilaya name as the 'nom commune'.
+    5. Ensure the 'code wilaya' is a two-digit number and the 'nom commune' is a string from the provided list or the wilaya name as a fallback.
+    6. Do not translate any names to French unless explicitly requested.
 
-Use the following format:
-"code wilaya": "XX",
-"nom commune": "XXXXX"
-'''
+    Use the following format:
+    "code wilaya": "XX",
+    "nom commune": "XXXXX"
+    '''
+    
     response = model.generate_content(prompt)
     return response.text
 
