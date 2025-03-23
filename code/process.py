@@ -150,7 +150,7 @@ def get_wilaya_info(wilaya_name, address, commune_names, model):
 
     Use the following format:
     "code wilaya": "XX",
-    "nom commune": "XXXXX"
+    "nom commune": "XXXXXXXXXXXXX"
     '''
     
     response = model.generate_content(prompt)
