@@ -141,6 +141,7 @@ def get_wilaya_info(wilaya_name, address, commune_names, model):
     - code wilaya: it's up to you to find it 
     
     Instructions:
+    - the 'Commune de livraison' name must be in english and the 'code wilaya' must be a number.
     1. If the 'Existing Wilaya Code' is provided, use it.
     2. If the 'Commune de livraison' is provided, use it.
     3. If either the Wilaya Code or Commune is missing, use the 'Wilaya de livraison' and 'Adresse de livraison' to find the correct values.
